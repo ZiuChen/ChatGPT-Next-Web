@@ -671,7 +671,11 @@ export const useChatStore = createPersistStore(
       },
 
       clearAllData() {
-        localStorage.clear();
+        utools.db.promises.allDocs().then((docs) => {
+          docs.forEach((doc) => {
+            utools.db.promises.remove(doc._id);
+          });
+        });
         location.reload();
       },
     };

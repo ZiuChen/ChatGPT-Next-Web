@@ -83,7 +83,7 @@ export default fallbackLang as LocaleType;
 
 function getItem(key: string) {
   try {
-    return localStorage.getItem(key);
+    return utools.dbStorage.getItem(key);
   } catch {
     return null;
   }
@@ -91,7 +91,7 @@ function getItem(key: string) {
 
 function setItem(key: string, value: string) {
   try {
-    localStorage.setItem(key, value);
+    utools.dbStorage.setItem(key, value);
   } catch {}
 }
 

@@ -60,6 +60,7 @@
     "lint-staged": "^13.2.2",
     "prettier": "^3.0.2",
     "typescript": "5.2.2",
+    "utools-api-types": "^5.0.0",
     "webpack": "^5.88.1"
   },
   "resolutions": {
