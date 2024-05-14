@@ -30,7 +30,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
-import { showConfirm, Selector } from "./ui-lib";
+import { showConfirm, showToast, Selector } from "./ui-lib";
+import { isUTools } from "../utils/utools";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -300,7 +301,10 @@ export function SideBar(props: { className?: string }) {
                 <IconButton icon={<SettingsIcon />} shadow />
               </Link>
             </div>
-            <div className={styles["sidebar-action"]}>
+            <div
+              className={styles["sidebar-action"]}
+              onClick={() => isUTools && utools.shellOpenExternal(REPO_URL)}
+            >
               <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
                 <IconButton icon={<GithubIcon />} shadow />
               </a>
