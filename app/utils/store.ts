@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { combine, persist } from "zustand/middleware";
+import { combine, createJSONStorage, persist } from "zustand/middleware";
 import { Updater } from "../typing";
 import { deepClone } from "./clone";
 
@@ -58,7 +58,9 @@ export function createPersistStore<T extends object, M>(
           } as M & MakeUpdater<T>;
         },
       ),
-      persistOptions as any,
+      Object.assign({}, persistOptions, {
+        storage: createJSONStorage(() => utools.dbStorage),
+      }) as any,
     ),
   );
 }
