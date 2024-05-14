@@ -83,6 +83,8 @@ import { nanoid } from "nanoid";
 import { useMaskStore } from "../store/mask";
 import { ProviderType } from "../utils/cloud";
 import { TTSConfigList } from "./tts-config";
+import { UToolsConfigList } from "./utools-config";
+import { isUTools } from "../utils/utools";
 
 function EditPromptModal(props: { id: string; onClose: () => void }) {
   const promptStore = usePromptStore();
@@ -1687,6 +1689,8 @@ export function Settings() {
             }}
           />
         </List>
+
+        {isUTools && UToolsConfigList()}
 
         {shouldShowPromptModal && (
           <UserPromptModal onClose={() => setShowPromptModal(false)} />

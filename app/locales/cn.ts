@@ -198,6 +198,12 @@ const cn = {
       SubTitle: "用户最新的一条消息会填充到此模板",
     },
 
+    UTools: {
+      PluginHeight: {
+        Title: "uTools - 插件高度",
+      },
+    },
+
     Update: {
       Version: (x: string) => `当前版本：${x}`,
       IsLatest: "已是最新版本",

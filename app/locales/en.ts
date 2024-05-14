@@ -200,6 +200,12 @@ const en: LocaleType = {
       SubTitle: "Newest message will be filled to this template",
     },
 
+    UTools: {
+      PluginHeight: {
+        Title: "uTools - Plugin Height",
+      },
+    },
+
     Update: {
       Version: (x: string) => `Version: ${x}`,
       IsLatest: "Latest version",
