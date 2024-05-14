@@ -18,6 +18,7 @@ export type Mask = {
   lang: Lang;
   builtin: boolean;
   plugin?: Plugin[];
+  globalAsk?: boolean;
 };
 
 export const DEFAULT_MASK_STATE = {
