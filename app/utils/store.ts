@@ -72,7 +72,9 @@ export function createPersistStore<T extends object, M>(
           } as M & MakeUpdater<T>;
         },
       ),
-      persistOptions as any,
+      Object.assign({}, persistOptions, {
+        storage: createJSONStorage(() => utools.dbStorage),
+      }) as any,
     ),
   );
 }
