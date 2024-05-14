@@ -30,7 +30,11 @@ export class ErrorBoundary extends React.Component<any, IErrorBoundaryState> {
     try {
       useSyncStore.getState().export();
     } finally {
-      localStorage.clear();
+      utools.db.promises.allDocs().then((docs) => {
+        docs.forEach((doc) => {
+          utools.db.promises.remove(doc._id);
+        });
+      });
       location.reload();
     }
   }

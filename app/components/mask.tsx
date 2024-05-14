@@ -405,13 +405,13 @@ export function MaskPage() {
   const chatStore = useChatStore();
 
   const [filterLang, setFilterLang] = useState<Lang | undefined>(
-    () => localStorage.getItem("Mask-language") as Lang | undefined,
+    () => utools.dbStorage.getItem("Mask-language") as Lang | undefined,
   );
   useEffect(() => {
     if (filterLang) {
-      localStorage.setItem("Mask-language", filterLang);
+      utools.dbStorage.setItem("Mask-language", filterLang);
     } else {
-      localStorage.removeItem("Mask-language");
+      utools.dbStorage.removeItem("Mask-language");
     }
   }, [filterLang]);
 
