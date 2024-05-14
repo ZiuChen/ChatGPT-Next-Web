@@ -5,9 +5,6 @@
   "main": "index.html",
   "logo": "macos.png",
   "preload": "preload.js",
-  "development": {
-    "main": "http://localhost:3000"
-  },
   "features": [
     {
       "code": "Launch ChatGPT Next",
