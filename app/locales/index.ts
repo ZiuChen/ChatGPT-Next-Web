@@ -85,11 +85,11 @@ merge(fallbackLang, targetLang);
 export default fallbackLang as LocaleType;
 
 function getItem(key: string) {
-  return localStorage.getItem(key);
+  return utools.dbStorage.getItem(key) ?? null;
 }
 
 function setItem(key: string, value: string) {
-  localStorage.setItem(key, value);
+  return utools.dbStorage.setItem(key, value);
 }
 
 function getLanguage() {

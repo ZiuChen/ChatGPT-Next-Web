@@ -754,8 +754,14 @@ export const useChatStore = createPersistStore(
       },
 
       async clearAllData() {
-        await indexedDBStorage.clear();
-        localStorage.clear();
+        await Promise.all([
+          indexedDBStorage.clear(),
+          utools.db.promises.allDocs().then((docs) => {
+            docs.forEach((doc) => {
+              utools.db.promises.remove(doc._id);
+            });
+          }),
+        ]);
         location.reload();
       },
       setLastInput(lastInput: string) {
