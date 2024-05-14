@@ -12,7 +12,7 @@ import { useChatStore } from "../store";
 
 import Locale from "../locales";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Path } from "../constant";
+import { Path, UNFINISHED_INPUT } from "../constant";
 import { MaskAvatar } from "./mask";
 import { Mask } from "../store/mask";
 import { useRef, useEffect } from "react";
@@ -102,14 +102,14 @@ export function ChatItem(props: {
 }
 
 export function ChatList(props: { narrow?: boolean }) {
-  const [sessions, selectedIndex, selectSession, moveSession] = useChatStore(
-    (state) => [
+  const [sessions, selectedIndex, currentSession, selectSession, moveSession] =
+    useChatStore((state) => [
       state.sessions,
       state.currentSessionIndex,
+      state.currentSession,
       state.selectSession,
       state.moveSession,
-    ],
-  );
+    ]);
   const chatStore = useChatStore();
   const navigate = useNavigate();
   const isMobileScreen = useMobileScreen();
@@ -129,6 +129,34 @@ export function ChatList(props: { narrow?: boolean }) {
 
     moveSession(source.index, destination.index);
   };
+
+  useEffect(() => {
+    const session = currentSession();
+    if (session) {
+      // After first session is selected, check if there is a global ask action.
+      // if so, select the session.
+      if (window.__UTOOLS__) {
+        const { action, assigned } = window.__UTOOLS__;
+        if (action && action.code.startsWith("global-ask/") && !assigned) {
+          const id = action.code.split("/")[1];
+          const sessions = chatStore.sessions;
+          const idx = sessions.findIndex((s) => s.id === id);
+          if (idx >= 0) {
+            chatStore.selectSession(idx);
+
+            if (action.payload) {
+              // Hack: update the dbStorage in order to update the textarea value.
+              const key = UNFINISHED_INPUT(id);
+              utools.dbStorage.setItem(key, action.payload);
+            }
+
+            // Only trigger once.
+            window.__UTOOLS__.assigned = true;
+          }
+        }
+      }
+    }
+  }, [chatStore, sessions, currentSession]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

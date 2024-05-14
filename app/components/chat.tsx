@@ -46,6 +46,8 @@ import StyleIcon from "../icons/palette.svg";
 import PluginIcon from "../icons/plugin.svg";
 import ShortcutkeyIcon from "../icons/shortcutkey.svg";
 import ReloadIcon from "../icons/reload.svg";
+import LinkVariant from "../icons/link-variant.svg";
+import LinkVariantOff from "../icons/link-variant-off.svg";
 
 import {
   ChatMessage,
@@ -114,6 +116,7 @@ import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { MultimodalContent } from "../client/api";
+import { isUTools } from "../utils/utools";
 
 const localStorage = safeLocalStorage();
 import { ClientApi } from "../client/api";
@@ -1408,6 +1411,17 @@ function _Chat() {
     if (mayBeUnfinishedInput && userInput.length === 0) {
       setUserInput(mayBeUnfinishedInput);
       utools.dbStorage.removeItem(key);
+
+      if (window.__UTOOLS__) {
+        const { action, assigned } = window.__UTOOLS__;
+        if (action?.payload && assigned) {
+          // Auto-submit
+          doSubmit(mayBeUnfinishedInput);
+
+          // Only trigger once.
+          delete window.__UTOOLS__?.action;
+        }
+      }
     }
 
     const dom = inputRef.current;
@@ -1569,6 +1583,33 @@ function _Chat() {
     };
   }, [messages, chatStore, navigate]);
 
+  function toggleUToolsFeature() {
+    if (!session.mask.globalAsk) {
+      chatStore.updateCurrentSession((session) => {
+        session.mask.globalAsk = true;
+      });
+      const code = "global-ask/" + session.id;
+      utools.setFeature({
+        code,
+        explain: `向 ${session.mask.name} 提问`,
+        platform: ["darwin", "win32", "linux"],
+        cmds: [
+          session.mask.name,
+          {
+            type: "over",
+            label: `向 ${session.mask.name} 提问`,
+          },
+        ],
+      });
+    } else {
+      chatStore.updateCurrentSession((session) => {
+        session.mask.globalAsk = false;
+      });
+      const code = "global-ask/" + session.id;
+      utools.removeFeature(code);
+    }
+  }
+
   return (
     <div className={styles.chat} key={session.id}>
       <div className="window-header" data-tauri-drag-region>
@@ -1616,6 +1657,17 @@ function _Chat() {
                 title={Locale.Chat.EditMessage.Title}
                 aria={Locale.Chat.EditMessage.Title}
                 onClick={() => setIsEditingMessage(true)}
+              />
+            </div>
+          )}
+          {isUTools && (
+            <div className="window-action-button">
+              <IconButton
+                icon={
+                  session.mask.globalAsk ? <LinkVariant /> : <LinkVariantOff />
+                }
+                bordered
+                onClick={() => toggleUToolsFeature()}
               />
             </div>
           )}

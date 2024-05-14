@@ -19,6 +19,7 @@ export type Mask = {
   builtin: boolean;
   plugin?: string[];
   enableArtifacts?: boolean;
+  globalAsk?: boolean;
 };
 
 export const DEFAULT_MASK_STATE = {
