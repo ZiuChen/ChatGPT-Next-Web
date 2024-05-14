@@ -676,6 +676,12 @@ const cn = {
         SubTitle: "生成此面具的直达链接",
         Action: "复制链接",
       },
+      UToolsFeature: {
+        GlobalAsk: {
+          Title: "uTools - 启用全局提问",
+          SubTitle: "全局提问将在所有插件中生效",
+        },
+      },
     },
   },
   NewChat: {

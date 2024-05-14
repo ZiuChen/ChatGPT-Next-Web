@@ -686,6 +686,12 @@ const en: LocaleType = {
         SubTitle: "Generate a link to this mask",
         Action: "Copy Link",
       },
+      UToolsFeature: {
+        GlobalAsk: {
+          Title: "uTools - Enable Global Ask",
+          SubTitle: "Global Ask will take effect in all plugins",
+        },
+      },
     },
   },
   NewChat: {
