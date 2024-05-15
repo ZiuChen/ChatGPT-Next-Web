@@ -652,6 +652,7 @@ export function Settings() {
     const keydownEvent = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         navigate(Path.Home);
+        e.stopPropagation(); // for uTools
       }
     };
     if (clientConfig?.isApp) {
