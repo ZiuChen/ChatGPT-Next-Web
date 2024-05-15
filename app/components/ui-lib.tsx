@@ -120,13 +120,14 @@ export function Modal(props: ModalProps) {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         props.onClose?.();
+        e.stopPropagation(); // for uTools
       }
     };
 
-    window.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keydown", onKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keydown", onKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
