@@ -1331,11 +1331,17 @@ function _Chat() {
         session.mask.globalAsk = true;
       });
       setupGlobalAsk(session);
+      showToast(
+        Locale.Mask.Config.UToolsFeature.GlobalAsk.Tips.Success(session.topic),
+      );
     } else {
       chatStore.updateCurrentSession((session) => {
         session.mask.globalAsk = false;
       });
       clearGlobalAsk(session.id);
+      showToast(
+        Locale.Mask.Config.UToolsFeature.GlobalAsk.Tips.Removed(session.topic),
+      );
     }
   }
 
