@@ -829,9 +829,16 @@ export function EditMessageModal(props: { onClose: () => void }) {
               type="text"
               value={session.topic}
               onInput={(e) =>
-                chatStore.updateCurrentSession(
-                  (session) => (session.topic = e.currentTarget.value),
-                )
+                chatStore.updateCurrentSession((session) => {
+                  session.topic = e.currentTarget.value;
+
+                  if (session.mask.globalAsk) {
+                    setupGlobalAsk({
+                      ...session,
+                      topic: e.currentTarget.value,
+                    });
+                  }
+                })
               }
             ></input>
           </ListItem>
