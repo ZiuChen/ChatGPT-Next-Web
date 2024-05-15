@@ -23,6 +23,7 @@ import { createPersistStore } from "../utils/store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
 import { collectModelsWithDefaultModel } from "../utils/model";
 import { useAccessStore } from "./access";
+import { clearGlobalAsk, setupGlobalAsk } from "../utils/utools";
 
 export type ChatMessage = RequestMessage & {
   date: string;
@@ -262,6 +263,8 @@ export const useChatStore = createPersistStore(
           sessions.push(createEmptySession());
         }
 
+        clearGlobalAsk(deletedSession.id);
+
         // for undo delete action
         const restoreState = {
           currentSessionIndex: get().currentSessionIndex,
@@ -279,6 +282,7 @@ export const useChatStore = createPersistStore(
             text: Locale.Home.Revert,
             onClick() {
               set(() => restoreState);
+              setupGlobalAsk(deletedSession);
             },
           },
           5000,
