@@ -680,6 +680,10 @@ const cn = {
         GlobalAsk: {
           Title: "uTools - 启用全局提问",
           SubTitle: "全局提问将在所有插件中生效",
+          Tips: {
+            Success: (topic: string) => `已启用 ${topic} 全局提问`,
+            Removed: (topic: string) => `已移除 ${topic} 全局提问`,
+          },
         },
       },
     },

@@ -690,6 +690,10 @@ const en: LocaleType = {
         GlobalAsk: {
           Title: "uTools - Enable Global Ask",
           SubTitle: "Global Ask will take effect in all plugins",
+          Tips: {
+            Success: (topic: string) => `Successfully set ${topic} global ask`,
+            Removed: (topic: string) => `${topic} global ask has been removed`,
+          },
         },
       },
     },
