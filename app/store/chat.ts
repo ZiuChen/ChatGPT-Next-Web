@@ -21,7 +21,7 @@ import {
   ServiceProvider,
 } from "../constant";
 import Locale, { getLang } from "../locales";
-import { isDalle3, safeLocalStorage } from "../utils";
+import { isDalle3 } from "../utils";
 import { prettyObject } from "../utils/format";
 import { createPersistStore } from "../utils/store";
 import { estimateTokenLength } from "../utils/token";
@@ -29,8 +29,7 @@ import { ModelConfig, ModelType, useAppConfig } from "./config";
 import { useAccessStore } from "./access";
 import { collectModelsWithDefaultModel } from "../utils/model";
 import { createEmptyMask, Mask } from "./mask";
-
-const localStorage = safeLocalStorage();
+import { clearGlobalAsk, setupGlobalAsk } from "../utils/utools";
 
 export type ChatMessageTool = {
   id: string;
@@ -315,6 +314,8 @@ export const useChatStore = createPersistStore(
           sessions.push(createEmptySession());
         }
 
+        clearGlobalAsk(deletedSession.id);
+
         // for undo delete action
         const restoreState = {
           currentSessionIndex: get().currentSessionIndex,
@@ -332,6 +333,7 @@ export const useChatStore = createPersistStore(
             text: Locale.Home.Revert,
             onClick() {
               set(() => restoreState);
+              setupGlobalAsk(deletedSession);
             },
           },
           5000,

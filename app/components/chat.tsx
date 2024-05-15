@@ -116,7 +116,7 @@ import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { MultimodalContent } from "../client/api";
-import { isUTools } from "../utils/utools";
+import { clearGlobalAsk, isUTools, setupGlobalAsk } from "../utils/utools";
 
 const localStorage = safeLocalStorage();
 import { ClientApi } from "../client/api";
@@ -1588,25 +1588,12 @@ function _Chat() {
       chatStore.updateCurrentSession((session) => {
         session.mask.globalAsk = true;
       });
-      const code = "global-ask/" + session.id;
-      utools.setFeature({
-        code,
-        explain: `向 ${session.mask.name} 提问`,
-        platform: ["darwin", "win32", "linux"],
-        cmds: [
-          session.mask.name,
-          {
-            type: "over",
-            label: `向 ${session.mask.name} 提问`,
-          },
-        ],
-      });
+      setupGlobalAsk(session);
     } else {
       chatStore.updateCurrentSession((session) => {
         session.mask.globalAsk = false;
       });
-      const code = "global-ask/" + session.id;
-      utools.removeFeature(code);
+      clearGlobalAsk(session.id);
     }
   }
 
