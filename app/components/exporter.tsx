@@ -36,7 +36,12 @@ import { toBlob, toPng } from "html-to-image";
 import { DEFAULT_MASK_AVATAR } from "../store/mask";
 
 import { prettyObject } from "../utils/format";
-import { EXPORT_MESSAGE_CLASS_NAME, ModelProvider } from "../constant";
+import {
+  EXPORT_MESSAGE_CLASS_NAME,
+  ModelProvider,
+  OWNER,
+  REPO,
+} from "../constant";
 import { getClientConfig } from "../config/client";
 import { ClientApi } from "../client/api";
 import { getMessageTextContent } from "../utils";
@@ -549,7 +554,7 @@ export function ImagePreviewer(props: {
           <div>
             <div className={styles["main-title"]}>NextChat</div>
             <div className={styles["sub-title"]}>
-              github.com/Yidadaa/ChatGPT-Next-Web
+              github.com/{OWNER}/{REPO}
             </div>
             <div className={styles["icons"]}>
               <ExportAvatar avatar={config.avatar} />
