@@ -21,6 +21,7 @@ import { merge } from "../utils/merge";
 import { safeLocalStorage } from "@/app/utils";
 
 import type { LocaleType } from "./cn";
+import { storage } from "../utils/utools";
 export type { LocaleType, PartialLocaleType } from "./cn";
 
 const localStorage = safeLocalStorage();

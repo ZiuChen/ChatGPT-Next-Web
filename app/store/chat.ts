@@ -24,7 +24,12 @@ import { createPersistStore } from "../utils/store";
 import { estimateTokenLength } from "../utils/token";
 import { ModelConfig, ModelType, useAppConfig } from "./config";
 import { createEmptyMask, Mask } from "./mask";
-import { clearGlobalAsk, setupGlobalAsk } from "../utils/utools";
+import {
+  clearGlobalAsk,
+  isUTools,
+  setupGlobalAsk,
+  storage,
+} from "../utils/utools";
 
 export type ChatMessageTool = {
   id: string;
@@ -711,10 +716,24 @@ export const useChatStore = createPersistStore(
       async clearAllData() {
         await Promise.all([
           indexedDBStorage.clear(),
-          utools.db.promises.allDocs().then((docs) => {
-            docs.forEach((doc) => {
-              utools.db.promises.remove(doc._id);
-            });
+          new Promise((resolve, reject) => {
+            if (isUTools) {
+              resolve(
+                utools.db.promises
+                  .allDocs()
+                  .then((docs) => {
+                    docs.forEach((doc) => {
+                      utools.db.promises.remove(doc._id);
+                    });
+                    return true;
+                  })
+                  .catch(reject),
+              );
+            } else {
+              // @ts-expect-error - Browser Environment
+              storage.clear();
+              resolve(true);
+            }
           }),
         ]);
         location.reload();

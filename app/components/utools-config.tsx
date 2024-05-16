@@ -3,15 +3,16 @@ import { useThrottledCallback } from "use-debounce";
 import Locale from "../locales";
 import { InputRange } from "./input-range";
 import { List, ListItem } from "./ui-lib";
+import { storage } from "../utils/utools";
 
 export function UToolsConfigList() {
   const [height, setHeight] = useState(
-    utools.dbStorage.getItem("utools-config/plugin-height") || 550,
+    storage.getItem("utools-config/plugin-height") || 550,
   );
 
   const updatePluginHeight = useThrottledCallback((height: number) => {
     utools.setExpendHeight(height);
-    utools.dbStorage.setItem("utools-config/plugin-height", height);
+    storage.setItem("utools-config/plugin-height", height);
   }, 250);
 
   useEffect(() => {
