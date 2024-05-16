@@ -117,11 +117,9 @@ function useHtmlLang() {
 }
 
 const useHasHydrated = () => {
-  console.log("useHasHydrated");
   const [hasHydrated, setHasHydrated] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("useHasHydrated, setHasHydrated");
     setHasHydrated(true);
   }, []);
 
@@ -223,7 +221,6 @@ export function useLoadData() {
 }
 
 export function Home() {
-  console.log("Home");
   useSwitchTheme();
   useLoadData();
   useHtmlLang();
@@ -234,11 +231,8 @@ export function Home() {
   }, []);
 
   if (!useHasHydrated()) {
-    console.log("Loading...");
     return <Loading />;
   }
-
-  console.log("Home render");
 
   return (
     <ErrorBoundary>
