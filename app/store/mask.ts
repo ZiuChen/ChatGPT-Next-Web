@@ -17,6 +17,9 @@ export type Mask = {
   modelConfig: ModelConfig;
   lang: Lang;
   builtin: boolean;
+  /**
+   * @deprecated use `session.globalAsk` instead
+   */
   globalAsk?: boolean;
 };
 

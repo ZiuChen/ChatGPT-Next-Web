@@ -61,6 +61,8 @@ export interface ChatSession {
   clearContextIndex?: number;
 
   mask: Mask;
+
+  globalAsk?: boolean;
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -263,7 +265,7 @@ export const useChatStore = createPersistStore(
           sessions.push(createEmptySession());
         }
 
-        clearGlobalAsk(deletedSession.id);
+        clearGlobalAsk(deletedSession);
 
         // for undo delete action
         const restoreState = {
@@ -693,7 +695,7 @@ export const useChatStore = createPersistStore(
   },
   {
     name: StoreKey.Chat,
-    version: 3.1,
+    version: 3.11,
     migrate(persistedState, version) {
       const state = persistedState as any;
       const newState = JSON.parse(
@@ -736,6 +738,15 @@ export const useChatStore = createPersistStore(
             const config = useAppConfig.getState();
             s.mask.modelConfig.enableInjectSystemPrompts =
               config.modelConfig.enableInjectSystemPrompts;
+          }
+        });
+      }
+
+      if (version < 3.11) {
+        // integrate `session.mask.globalAsk` to `session.globalAsk`
+        newState.sessions.forEach((s) => {
+          if (s.mask.globalAsk) {
+            s.globalAsk = true;
           }
         });
       }
