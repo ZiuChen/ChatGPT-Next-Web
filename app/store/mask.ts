@@ -18,6 +18,9 @@ export type Mask = {
   lang: Lang;
   builtin: boolean;
   plugin?: Plugin[];
+  /**
+   * @deprecated use `session.globalAsk` instead
+   */
   globalAsk?: boolean;
 };
 
