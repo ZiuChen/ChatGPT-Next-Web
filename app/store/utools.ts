@@ -3,8 +3,10 @@ import { createPersistStore } from "../utils/store";
 
 export const DEFAULT_UTOOLS_STATE: {
   action: { code: string; type: string; payload: any; option: any } | null;
+  subInputText: string;
 } = {
   action: null,
+  subInputText: "",
 };
 
 export type UToolsState = typeof DEFAULT_UTOOLS_STATE;

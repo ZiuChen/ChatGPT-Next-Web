@@ -671,7 +671,7 @@ const en: LocaleType = {
       UToolsFeature: {
         GlobalAsk: {
           Title: "uTools - Enable Global Ask",
-          SubTitle: "Global Ask will take effect in all plugins",
+          SubTitle: "You can ask questions through the super panel",
           Tips: {
             Success: (topic: string) => `Successfully set ${topic} global ask`,
             Removed: (topic: string) => `${topic} global ask has been removed`,

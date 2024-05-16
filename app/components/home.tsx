@@ -241,6 +241,11 @@ export function Home() {
   }, []);
 
   useUToolsMessage((type, payload) => {
+    const height = storage.getItem("utools-config/plugin-height");
+    if (height !== null) {
+      utools.setExpendHeight(height);
+    }
+
     if (type === "onPluginEnter") {
       const action = assetCast<UToolsEventMap["onPluginEnter"]>(payload);
       uToolsStore.updateAction(action);
@@ -253,18 +258,30 @@ export function Home() {
           // select the session
           chatStore.selectSession(idx);
 
-          if (action.type === "over" && action.payload) {
-            // auto fill only when the action is over. (not 'text')
-            // Hack: update the dbStorage in order to update the textarea value.
-            const key = UNFINISHED_INPUT(id);
-            storage.setItem(key, action.payload);
+          if (action.type === "text") {
+            // TODO: Optional Quick ask
+            utools.setExpendHeight(0);
+            let result = "";
+            utools.setSubInput(({ text }) => {
+              result = text;
+            }, "请输入内容，按下回车提问");
+
+            document.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") {
+                // Revert the height
+                utools.setExpendHeight(
+                  // TODO: integrate this state into store
+                  storage.getItem("utools-config/plugin-height") || 550,
+                );
+                utools.removeSubInput();
+
+                if (result) {
+                  uToolsStore.update((state) => (state.subInputText = result));
+                }
+              }
+            });
           }
         }
-      }
-
-      const height = storage.getItem("utools-config/plugin-height");
-      if (height !== null) {
-        utools.setExpendHeight(height);
       }
     }
   });
