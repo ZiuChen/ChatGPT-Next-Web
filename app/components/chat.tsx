@@ -37,8 +37,8 @@ import AutoIcon from "../icons/auto.svg";
 import BottomIcon from "../icons/bottom.svg";
 import StopIcon from "../icons/pause.svg";
 import RobotIcon from "../icons/robot.svg";
-import LinkVariant from "../icons/link-variant.svg";
-import LinkVariantOff from "../icons/link-variant-off.svg";
+import Flash from "../icons/flash.svg";
+import FlashOff from "../icons/flash-off.svg";
 
 import {
   ChatMessage,
@@ -1117,7 +1117,11 @@ function _Chat() {
   // edit / insert message modal
   const [isEditingMessage, setIsEditingMessage] = useState(false);
 
-  const [action] = useUToolsStore((state) => [state.action]);
+  const utoolsStore = useUToolsStore();
+  const [action, subInputText] = useUToolsStore((state) => [
+    state.action,
+    state.subInputText,
+  ]);
 
   useEffect(
     () => {
@@ -1135,6 +1139,21 @@ function _Chat() {
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [action],
+  );
+
+  useEffect(
+    () => {
+      if (subInputText) {
+        // consume subInputText
+        setUserInput(subInputText);
+        doSubmit(subInputText);
+
+        // clear subInputText avoid persistent
+        utoolsStore.update((state) => (state.subInputText = ""));
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [subInputText],
   );
 
   // remember unfinished input
@@ -1303,7 +1322,7 @@ function _Chat() {
           {isUTools && (
             <div className="window-action-button">
               <IconButton
-                icon={session.globalAsk ? <LinkVariant /> : <LinkVariantOff />}
+                icon={session.globalAsk ? <Flash /> : <FlashOff />}
                 bordered
                 onClick={() => toggleGlobalAsk()}
               />
