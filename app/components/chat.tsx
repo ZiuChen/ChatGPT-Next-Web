@@ -838,7 +838,7 @@ export function EditMessageModal(props: { onClose: () => void }) {
                 chatStore.updateCurrentSession((session) => {
                   session.topic = e.currentTarget.value;
 
-                  if (session.mask.globalAsk) {
+                  if (session.globalAsk) {
                     setupGlobalAsk({
                       ...session,
                       topic: e.currentTarget.value,
@@ -1605,10 +1605,10 @@ function _Chat() {
     };
   }, [messages, chatStore, navigate]);
 
-  function toggleUToolsFeature() {
-    if (!session.mask.globalAsk) {
+  function toggleGlobalAsk() {
+    if (!session.globalAsk) {
       chatStore.updateCurrentSession((session) => {
-        session.mask.globalAsk = true;
+        session.globalAsk = true;
       });
       setupGlobalAsk(session);
       showToast(
@@ -1616,9 +1616,10 @@ function _Chat() {
       );
     } else {
       chatStore.updateCurrentSession((session) => {
-        session.mask.globalAsk = false;
+        session.globalAsk = false;
       });
-      clearGlobalAsk(session.id);
+      clearGlobalAsk(session);
+
       showToast(
         Locale.Mask.Config.UToolsFeature.GlobalAsk.Tips.Removed(session.topic),
       );
@@ -1678,11 +1679,9 @@ function _Chat() {
           {isUTools && (
             <div className="window-action-button">
               <IconButton
-                icon={
-                  session.mask.globalAsk ? <LinkVariant /> : <LinkVariantOff />
-                }
+                icon={session.globalAsk ? <LinkVariant /> : <LinkVariantOff />}
                 bordered
-                onClick={() => toggleUToolsFeature()}
+                onClick={() => toggleGlobalAsk()}
               />
             </div>
           )}
