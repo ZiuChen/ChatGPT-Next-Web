@@ -8,11 +8,11 @@ export const isUTools = typeof window !== "undefined" && !!window.utools;
  */
 export function setupGlobalAsk(session: ChatSession) {
   if (!isUTools) {
-    return;
+    return session;
   }
 
   const code = "global-ask/" + session.id;
-  return utools.setFeature({
+  utools.setFeature({
     code,
     explain: `向 ${session.topic} 提问`,
     platform: ["darwin", "win32", "linux"],
@@ -24,12 +24,18 @@ export function setupGlobalAsk(session: ChatSession) {
       },
     ],
   });
+
+  return session;
 }
 
-export function clearGlobalAsk(sessionId: string) {
+export function clearGlobalAsk(session: ChatSession) {
   if (isUTools) {
-    return utools.removeFeature("global-ask/" + sessionId);
+    utools.removeFeature("global-ask/" + session.id);
+    delete session?.globalAsk;
+    return session;
   }
+
+  return session;
 }
 
 export const storage = isUTools ? utools.dbStorage : globalThis?.localStorage;

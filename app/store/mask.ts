@@ -19,6 +19,9 @@ export type Mask = {
   builtin: boolean;
   plugin?: string[];
   enableArtifacts?: boolean;
+  /**
+   * @deprecated use `session.globalAsk` instead
+   */
   globalAsk?: boolean;
 };
 
