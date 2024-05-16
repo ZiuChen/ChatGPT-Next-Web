@@ -6,6 +6,7 @@ import { ISSUE_URL } from "../constant";
 import Locale from "../locales";
 import { showConfirm } from "./ui-lib";
 import { useSyncStore } from "../store/sync";
+import { isUTools, storage } from "../utils/utools";
 
 interface IErrorBoundaryState {
   hasError: boolean;
@@ -28,11 +29,16 @@ export class ErrorBoundary extends React.Component<any, IErrorBoundaryState> {
     try {
       useSyncStore.getState().export();
     } finally {
-      utools.db.promises.allDocs().then((docs) => {
-        docs.forEach((doc) => {
-          utools.db.promises.remove(doc._id);
+      if (isUTools) {
+        utools.db.promises.allDocs().then((docs) => {
+          docs.forEach((doc) => {
+            utools.db.promises.remove(doc._id);
+          });
         });
-      });
+      } else {
+        // @ts-expect-error - Browser environment
+        storage.clear();
+      }
       location.reload();
     }
   }

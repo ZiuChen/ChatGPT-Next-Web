@@ -23,7 +23,7 @@ import { createPersistStore } from "../utils/store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
 import { collectModelsWithDefaultModel } from "../utils/model";
 import { useAccessStore } from "./access";
-import { clearGlobalAsk, setupGlobalAsk } from "../utils/utools";
+import { clearGlobalAsk, isUTools, setupGlobalAsk } from "../utils/utools";
 
 export type ChatMessage = RequestMessage & {
   date: string;
@@ -675,11 +675,16 @@ export const useChatStore = createPersistStore(
       },
 
       clearAllData() {
-        utools.db.promises.allDocs().then((docs) => {
-          docs.forEach((doc) => {
-            utools.db.promises.remove(doc._id);
+        if (isUTools) {
+          utools.db.promises.allDocs().then((docs) => {
+            docs.forEach((doc) => {
+              utools.db.promises.remove(doc._id);
+            });
           });
-        });
+        } else {
+          // @ts-expect-error - Browser environment
+          storage.clear();
+        }
         location.reload();
       },
     };

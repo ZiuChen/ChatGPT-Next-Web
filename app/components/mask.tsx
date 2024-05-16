@@ -56,6 +56,7 @@ import {
   OnDragEndResponder,
 } from "@hello-pangea/dnd";
 import { getMessageTextContent } from "../utils";
+import { storage } from "../utils/utools";
 
 // drag and drop helper function
 function reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {
@@ -405,13 +406,13 @@ export function MaskPage() {
   const chatStore = useChatStore();
 
   const [filterLang, setFilterLang] = useState<Lang | undefined>(
-    () => utools.dbStorage.getItem("Mask-language") as Lang | undefined,
+    () => storage.getItem("Mask-language") as Lang | undefined,
   );
   useEffect(() => {
     if (filterLang) {
-      utools.dbStorage.setItem("Mask-language", filterLang);
+      storage.setItem("Mask-language", filterLang);
     } else {
-      utools.dbStorage.removeItem("Mask-language");
+      storage.removeItem("Mask-language");
     }
   }, [filterLang]);
 

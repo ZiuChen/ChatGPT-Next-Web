@@ -100,7 +100,12 @@ import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { MultimodalContent } from "../client/api";
-import { clearGlobalAsk, isUTools, setupGlobalAsk } from "../utils/utools";
+import {
+  clearGlobalAsk,
+  isUTools,
+  setupGlobalAsk,
+  storage,
+} from "../utils/utools";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -784,7 +789,7 @@ function _Chat() {
       .onUserInput(userInput, attachImages)
       .then(() => setIsLoading(false));
     setAttachImages([]);
-    utools.dbStorage.setItem(LAST_INPUT_KEY, userInput);
+    storage.setItem(LAST_INPUT_KEY, userInput);
     setUserInput("");
     setPromptHints([]);
     if (!isMobileScreen) inputRef.current?.focus();
@@ -850,7 +855,7 @@ function _Chat() {
       userInput.length <= 0 &&
       !(e.metaKey || e.altKey || e.ctrlKey)
     ) {
-      setUserInput(utools.dbStorage.getItem(LAST_INPUT_KEY) ?? "");
+      setUserInput(storage.getItem(LAST_INPUT_KEY) ?? "");
       e.preventDefault();
       return;
     }
@@ -1115,10 +1120,10 @@ function _Chat() {
   useEffect(() => {
     // try to load from local storage
     const key = UNFINISHED_INPUT(session.id);
-    const mayBeUnfinishedInput = utools.dbStorage.getItem(key);
+    const mayBeUnfinishedInput = storage.getItem(key);
     if (mayBeUnfinishedInput && userInput.length === 0) {
       setUserInput(mayBeUnfinishedInput);
-      utools.dbStorage.removeItem(key);
+      storage.removeItem(key);
 
       if (window.__UTOOLS__) {
         const { action, assigned } = window.__UTOOLS__;
@@ -1134,7 +1139,7 @@ function _Chat() {
 
     const dom = inputRef.current;
     return () => {
-      utools.dbStorage.setItem(key, dom?.value ?? "");
+      storage.setItem(key, dom?.value ?? "");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
