@@ -27,9 +27,4 @@ declare interface Window {
       sendNotification(options: string | Options): void;
     };
   };
-
-  __UTOOLS__?: {
-    action?: { code: string; type: string; payload: any; option: any };
-    assigned?: boolean;
-  };
 }
