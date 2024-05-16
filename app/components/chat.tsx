@@ -122,6 +122,7 @@ import {
   setupGlobalAsk,
   storage,
 } from "../utils/utools";
+import { useUToolsStore } from "../store/utools";
 
 const localStorage = safeLocalStorage();
 import { ClientApi } from "../client/api";
@@ -1415,6 +1416,26 @@ function _Chat() {
   // edit / insert message modal
   const [isEditingMessage, setIsEditingMessage] = useState(false);
 
+  const [action] = useUToolsStore((state) => [state.action]);
+
+  useEffect(
+    () => {
+      if (
+        action &&
+        action.code.startsWith("global-ask/") &&
+        action.type === "over" &&
+        action.payload
+      ) {
+        setUserInput(action.payload);
+
+        // TODO: Optional Auto-submit
+        doSubmit(action.payload);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [action],
+  );
+
   // remember unfinished input
   useEffect(() => {
     // try to load from local storage
@@ -1423,17 +1444,6 @@ function _Chat() {
     if (mayBeUnfinishedInput && userInput.length === 0) {
       setUserInput(mayBeUnfinishedInput);
       storage.removeItem(key);
-
-      if (window.__UTOOLS__) {
-        const { action, assigned } = window.__UTOOLS__;
-        if (action?.payload && assigned) {
-          // Auto-submit
-          doSubmit(mayBeUnfinishedInput);
-
-          // Only trigger once.
-          delete window.__UTOOLS__?.action;
-        }
-      }
     }
 
     const dom = inputRef.current;

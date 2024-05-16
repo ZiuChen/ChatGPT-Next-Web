@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from "react";
 import { ChatSession } from "../store";
 
 export const isUTools = typeof window !== "undefined" && !!window.utools;
@@ -32,3 +33,39 @@ export function clearGlobalAsk(sessionId: string) {
 }
 
 export const storage = isUTools ? utools.dbStorage : globalThis?.localStorage;
+
+export interface UToolsEventMap {
+  onPluginEnter: { code: string; type: string; payload: any; option: any };
+  onPluginDetach: void;
+}
+
+export function useUToolsMessage<Type extends keyof UToolsEventMap>(
+  handler: (type: Type, payload: UToolsEventMap[Type]) => void,
+) {
+  const _handler = useCallback(
+    (e: MessageEvent) => {
+      const { type, payload } = e.data;
+      if (typeof type !== "string" || !type.startsWith("utools:")) {
+        return;
+      }
+      handler(type.split(":")[1] as Type, payload);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  useEffect(() => {
+    if (!isUTools) {
+      return;
+    }
+    window.addEventListener("message", _handler);
+    return () => {
+      window.removeEventListener("message", _handler);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+}
+
+export function assetCast<T>(value: unknown): T {
+  return value as T;
+}

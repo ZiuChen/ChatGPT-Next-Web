@@ -18,7 +18,6 @@ import { Mask } from "../store/mask";
 import { useRef, useEffect } from "react";
 import { showConfirm } from "./ui-lib";
 import { useMobileScreen } from "../utils";
-import { storage } from "../utils/utools";
 
 export function ChatItem(props: {
   onClick?: () => void;
@@ -130,34 +129,6 @@ export function ChatList(props: { narrow?: boolean }) {
 
     moveSession(source.index, destination.index);
   };
-
-  useEffect(() => {
-    const session = currentSession();
-    if (session) {
-      // After first session is selected, check if there is a global ask action.
-      // if so, select the session.
-      if (window.__UTOOLS__) {
-        const { action, assigned } = window.__UTOOLS__;
-        if (action && action.code.startsWith("global-ask/") && !assigned) {
-          const id = action.code.split("/")[1];
-          const sessions = chatStore.sessions;
-          const idx = sessions.findIndex((s) => s.id === id);
-          if (idx >= 0) {
-            chatStore.selectSession(idx);
-
-            if (action.payload) {
-              // Hack: update the dbStorage in order to update the textarea value.
-              const key = UNFINISHED_INPUT(id);
-              storage.setItem(key, action.payload);
-            }
-
-            // Only trigger once.
-            window.__UTOOLS__.assigned = true;
-          }
-        }
-      }
-    }
-  }, [chatStore, sessions, currentSession]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

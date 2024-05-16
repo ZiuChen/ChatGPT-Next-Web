@@ -81,6 +81,7 @@ export enum StoreKey {
   Update = "chat-update",
   Sync = "sync",
   SdList = "sd-list",
+  UTools = "utools",
 }
 
 export const DEFAULT_SIDEBAR_WIDTH = 300;

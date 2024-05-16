@@ -12,7 +12,7 @@ import LoadingIcon from "../icons/three-dots.svg";
 import { getCSSVar, useMobileScreen } from "../utils";
 
 import dynamic from "next/dynamic";
-import { Path, SlotID } from "../constant";
+import { ModelProvider, Path, SlotID, UNFINISHED_INPUT } from "../constant";
 import { ErrorBoundary } from "./error";
 
 import { getISOLang, getLang } from "../locales";
@@ -28,7 +28,14 @@ import { useAppConfig } from "../store/config";
 import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
 import { type ClientApi, getClientApi } from "../client/api";
-import { useAccessStore } from "../store";
+import { useAccessStore, useChatStore } from "../store";
+import {
+  UToolsEventMap,
+  assetCast,
+  storage,
+  useUToolsMessage,
+} from "../utils/utools";
+import { useUToolsStore } from "../store/utools";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -221,6 +228,9 @@ export function useLoadData() {
 }
 
 export function Home() {
+  const chatStore = useChatStore();
+  const uToolsStore = useUToolsStore();
+
   useSwitchTheme();
   useLoadData();
   useHtmlLang();
@@ -229,6 +239,35 @@ export function Home() {
     console.log("[Config] got config from build time", getClientConfig());
     useAccessStore.getState().fetch();
   }, []);
+
+  useUToolsMessage((type, payload) => {
+    if (type === "onPluginEnter") {
+      const action = assetCast<UToolsEventMap["onPluginEnter"]>(payload);
+      uToolsStore.updateAction(action);
+
+      if (action && action.code.startsWith("global-ask/")) {
+        const id = action.code.split("/")[1];
+        const sessions = chatStore.sessions;
+        const idx = sessions.findIndex((s) => s.id === id);
+        if (idx >= 0) {
+          // select the session
+          chatStore.selectSession(idx);
+
+          if (action.type === "over" && action.payload) {
+            // auto fill only when the action is over. (not 'text')
+            // Hack: update the dbStorage in order to update the textarea value.
+            const key = UNFINISHED_INPUT(id);
+            storage.setItem(key, action.payload);
+          }
+        }
+      }
+
+      const height = storage.getItem("utools-config/plugin-height");
+      if (height !== null) {
+        utools.setExpendHeight(height);
+      }
+    }
+  });
 
   if (!useHasHydrated()) {
     return <Loading />;

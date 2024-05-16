@@ -1,8 +1,8 @@
-utools.onPluginEnter((action) => {
-  window.__UTOOLS__ = { action };
+console.log("preload.js");
 
-  const height = utools.dbStorage.getItem("utools-config/plugin-height");
-  if (height !== null) {
-    utools.setExpendHeight(height);
-  }
+utools.onPluginEnter((action) => {
+  window.postMessage({
+    type: "utools:onPluginEnter",
+    payload: action,
+  });
 });

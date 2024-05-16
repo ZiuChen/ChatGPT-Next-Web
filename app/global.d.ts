@@ -33,9 +33,4 @@ declare interface Window {
       ): Promise<Response<T>>;
     };
   };
-
-  __UTOOLS__?: {
-    action?: { code: string; type: string; payload: any; option: any };
-    assigned?: boolean;
-  };
 }
