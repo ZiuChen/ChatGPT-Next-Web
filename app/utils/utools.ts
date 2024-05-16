@@ -30,3 +30,5 @@ export function clearGlobalAsk(sessionId: string) {
     return utools.removeFeature("global-ask/" + sessionId);
   }
 }
+
+export const storage = isUTools ? utools.dbStorage : globalThis?.localStorage;

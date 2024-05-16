@@ -18,6 +18,7 @@ import { Mask } from "../store/mask";
 import { useRef, useEffect } from "react";
 import { showConfirm } from "./ui-lib";
 import { useMobileScreen } from "../utils";
+import { storage } from "../utils/utools";
 
 export function ChatItem(props: {
   onClick?: () => void;
@@ -147,7 +148,7 @@ export function ChatList(props: { narrow?: boolean }) {
             if (action.payload) {
               // Hack: update the dbStorage in order to update the textarea value.
               const key = UNFINISHED_INPUT(id);
-              utools.dbStorage.setItem(key, action.payload);
+              storage.setItem(key, action.payload);
             }
 
             // Only trigger once.
