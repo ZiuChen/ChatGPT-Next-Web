@@ -679,7 +679,7 @@ const cn = {
       UToolsFeature: {
         GlobalAsk: {
           Title: "uTools - 启用全局提问",
-          SubTitle: "全局提问将在所有插件中生效",
+          SubTitle: "可以通过超级面板唤起对话框进行提问",
           Tips: {
             Success: (topic: string) => `已启用 ${topic} 全局提问`,
             Removed: (topic: string) => `已移除 ${topic} 全局提问`,
