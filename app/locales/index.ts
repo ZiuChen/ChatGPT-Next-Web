@@ -20,6 +20,7 @@ import sk from "./sk";
 import { merge } from "../utils/merge";
 
 import type { LocaleType } from "./cn";
+import { storage } from "../utils/utools";
 export type { LocaleType, PartialLocaleType } from "./cn";
 
 const ALL_LANGS = {
@@ -83,7 +84,7 @@ export default fallbackLang as LocaleType;
 
 function getItem(key: string) {
   try {
-    return utools.dbStorage.getItem(key);
+    return storage.getItem(key);
   } catch {
     return null;
   }
@@ -91,7 +92,7 @@ function getItem(key: string) {
 
 function setItem(key: string, value: string) {
   try {
-    utools.dbStorage.setItem(key, value);
+    storage.setItem(key, value);
   } catch {}
 }
 

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { combine, createJSONStorage, persist } from "zustand/middleware";
 import { Updater } from "../typing";
 import { deepClone } from "./clone";
+import { storage } from "./utools";
 
 type SecondParam<T> = T extends (
   _f: infer _F,
@@ -59,7 +60,7 @@ export function createPersistStore<T extends object, M>(
         },
       ),
       Object.assign({}, persistOptions, {
-        storage: createJSONStorage(() => utools.dbStorage),
+        storage: createJSONStorage(() => storage),
       }) as any,
     ),
   );
