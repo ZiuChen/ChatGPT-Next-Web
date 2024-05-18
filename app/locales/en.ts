@@ -460,16 +460,6 @@ const en: LocaleType = {
         SubTitle: "Generate a link to this mask",
         Action: "Copy Link",
       },
-      UToolsFeature: {
-        GlobalAsk: {
-          Title: "uTools - Enable Global Ask",
-          SubTitle: "You can ask questions through the super panel",
-          Tips: {
-            Success: (topic: string) => `Successfully set ${topic} global ask`,
-            Removed: (topic: string) => `${topic} global ask has been removed`,
-          },
-        },
-      },
     },
   },
   NewChat: {
@@ -501,6 +491,17 @@ const en: LocaleType = {
     Messages: "Messages",
     Topic: "Topic",
     Time: "Time",
+  },
+
+  UToolsFeature: {
+    GlobalAsk: {
+      Title: "Global Ask",
+      SubTitle: "You can ask questions through the super panel",
+      Tips: {
+        Success: (topic: string) => `Successfully set ${topic} global ask`,
+        Removed: (topic: string) => `${topic} global ask has been removed`,
+      },
+    },
   },
 
   URLCommand: {

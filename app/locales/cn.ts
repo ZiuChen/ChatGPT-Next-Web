@@ -453,16 +453,6 @@ const cn = {
         SubTitle: "生成此面具的直达链接",
         Action: "复制链接",
       },
-      UToolsFeature: {
-        GlobalAsk: {
-          Title: "uTools - 启用全局提问",
-          SubTitle: "可以通过超级面板唤起对话框进行提问",
-          Tips: {
-            Success: (topic: string) => `已启用 ${topic} 全局提问`,
-            Removed: (topic: string) => `已移除 ${topic} 全局提问`,
-          },
-        },
-      },
     },
   },
   NewChat: {
@@ -499,6 +489,16 @@ const cn = {
     Messages: "消息",
     Topic: "主题",
     Time: "时间",
+  },
+  UToolsFeature: {
+    GlobalAsk: {
+      Title: "全局提问",
+      SubTitle: "可以通过超级面板唤起对话框进行提问",
+      Tips: {
+        Success: (topic: string) => `已启用 ${topic} 全局提问`,
+        Removed: (topic: string) => `已移除 ${topic} 全局提问`,
+      },
+    },
   },
 };
 
