@@ -1233,6 +1233,9 @@ function _Chat() {
 
         // TODO: Optional Auto-submit
         doSubmit(action.payload);
+
+        // Avoid consumed again
+        utoolsStore.updateAction(null);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1365,18 +1368,14 @@ function _Chat() {
         session.globalAsk = true;
       });
       setupGlobalAsk(session);
-      showToast(
-        Locale.Mask.Config.UToolsFeature.GlobalAsk.Tips.Success(session.topic),
-      );
+      showToast(Locale.UToolsFeature.GlobalAsk.Tips.Success(session.topic));
     } else {
       chatStore.updateCurrentSession((session) => {
         session.globalAsk = false;
       });
       clearGlobalAsk(session);
 
-      showToast(
-        Locale.Mask.Config.UToolsFeature.GlobalAsk.Tips.Removed(session.topic),
-      );
+      showToast(Locale.UToolsFeature.GlobalAsk.Tips.Removed(session.topic));
     }
   }
 
@@ -1408,21 +1407,24 @@ function _Chat() {
           </div>
         </div>
         <div className="window-actions">
-          {!isMobileScreen && (
-            <div className="window-action-button">
-              <IconButton
-                icon={<RenameIcon />}
-                bordered
-                onClick={() => setIsEditingMessage(true)}
-              />
-            </div>
-          )}
           {isUTools && (
             <div className="window-action-button">
               <IconButton
                 icon={session.globalAsk ? <Flash /> : <FlashOff />}
                 bordered
                 onClick={() => toggleGlobalAsk()}
+                text={
+                  !session.globalAsk ? Locale.UToolsFeature.GlobalAsk.Title : ""
+                }
+              />
+            </div>
+          )}
+          {!isMobileScreen && (
+            <div className="window-action-button">
+              <IconButton
+                icon={<RenameIcon />}
+                bordered
+                onClick={() => setIsEditingMessage(true)}
               />
             </div>
           )}
