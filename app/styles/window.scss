@@ -6,6 +6,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  -webkit-app-region: drag; // Allow dragging the window by clicking on the header
 }
 
 .window-header-title {
