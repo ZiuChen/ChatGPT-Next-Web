@@ -1,3 +1,5 @@
+const { ipcRenderer } = require("electron");
+
 console.log("preload.js");
 
 utools.onPluginEnter((action) => {
@@ -6,3 +8,7 @@ utools.onPluginEnter((action) => {
     payload: action,
   });
 });
+
+window.preload = {
+  ipcRenderer,
+};
