@@ -27,4 +27,6 @@ declare interface Window {
       sendNotification(options: string | Options): void;
     };
   };
+
+  __UTOOLS_ASIDE__?: any;
 }

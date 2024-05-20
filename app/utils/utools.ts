@@ -3,6 +3,10 @@ import { ChatSession } from "../store";
 
 export const isUTools = typeof window !== "undefined" && !!window.utools;
 
+export const isBrowserWindow = isUTools
+  ? utools.getWindowType() === "browser"
+  : false;
+
 /**
  * Setup the feature for the chat session.
  */
