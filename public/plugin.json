@@ -9,6 +9,11 @@
       "code": "Launch ChatGPT Next",
       "explain": "启动 ChatGPT Next",
       "cmds": ["ai", "gpt", "ChatGPT Next", "openai"]
+    },
+    {
+      "code": "Launch ChatGPT Next Aside",
+      "explain": "开启 ChatGPT Next 侧栏",
+      "cmds": ["ChatGPT Next Aside", "侧栏"]
     }
   ]
 }
