@@ -31,7 +31,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast, Selector } from "./ui-lib";
-import { isUTools } from "../utils/utools";
+import { isBrowserWindow, isUTools } from "../utils/utools";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -123,6 +123,14 @@ export function useDragSideBar() {
     const sideBarWidth = isMobileScreen ? "100vw" : `${barWidth}px`;
     document.documentElement.style.setProperty("--sidebar-width", sideBarWidth);
   }, [config.sidebarWidth, isMobileScreen, shouldNarrow]);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isBrowserWindow) {
+      // Auto fold sidebar
+      navigate(Path.Chat);
+    }
+  }, []);
 
   return {
     onDragStart,
