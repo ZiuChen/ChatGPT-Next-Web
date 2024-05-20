@@ -33,4 +33,6 @@ declare interface Window {
       ): Promise<Response<T>>;
     };
   };
+
+  __UTOOLS_ASIDE__?: any;
 }

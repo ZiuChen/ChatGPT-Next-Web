@@ -2,7 +2,7 @@
 
 require("../polyfill");
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import styles from "./home.module.scss";
 
@@ -32,6 +32,7 @@ import { useAccessStore, useChatStore } from "../store";
 import {
   UToolsEventMap,
   assetCast,
+  isBrowserWindow,
   storage,
   useUToolsMessage,
 } from "../utils/utools";
@@ -207,6 +208,14 @@ function Screen() {
       className={`${styles.container} ${
         shouldTightBorder ? styles["tight-container"] : styles.container
       } ${getLang() === "ar" ? styles["rtl-screen"] : ""}`}
+      style={
+        isBrowserWindow
+          ? {
+              // Offset of top bar
+              paddingTop: "15px",
+            }
+          : {}
+      }
     >
       {renderContent()}
     </div>
@@ -240,6 +249,31 @@ export function Home() {
     useAccessStore.getState().fetch();
   }, []);
 
+  const handler = useCallback((_: any, action: any) => {
+    const id = action.code.split("/")[1];
+    const sessions = chatStore.sessions;
+    const idx = sessions.findIndex((s) => s.id === id);
+    if (idx === -1) {
+      return;
+    }
+
+    // Update the action
+    uToolsStore.updateAction(action);
+
+    // select the session
+    chatStore.selectSession(idx);
+  }, []);
+
+  useEffect(() => {
+    if (isBrowserWindow) {
+      window.preload.ipcRenderer.on("globalAsk", handler);
+
+      return () => {
+        window.preload.ipcRenderer.off("globalAsk", handler);
+      };
+    }
+  }, []);
+
   useUToolsMessage((type, payload) => {
     const height = storage.getItem("utools-config/plugin-height");
     if (height !== null) {
@@ -248,39 +282,115 @@ export function Home() {
 
     if (type === "onPluginEnter") {
       const action = assetCast<UToolsEventMap["onPluginEnter"]>(payload);
-      uToolsStore.updateAction(action);
 
       if (action && action.code.startsWith("global-ask/")) {
+        if (window.__UTOOLS_ASIDE__) {
+          window.__UTOOLS_ASIDE__.webContents.send("globalAsk", action);
+          return;
+        }
+
+        // Update the action
+        uToolsStore.updateAction(action);
+
         const id = action.code.split("/")[1];
         const sessions = chatStore.sessions;
         const idx = sessions.findIndex((s) => s.id === id);
-        if (idx >= 0) {
-          // select the session
-          chatStore.selectSession(idx);
+        if (idx === -1) {
+          return;
+        }
 
-          if (action.type === "text") {
-            // TODO: Optional Quick ask
-            utools.setExpendHeight(0);
-            let result = "";
-            utools.setSubInput(({ text }) => {
-              result = text;
-            }, "请输入内容，按下回车提问");
+        // select the session
+        chatStore.selectSession(idx);
 
-            document.addEventListener("keydown", (e) => {
-              if (e.key === "Enter") {
-                // Revert the height
-                utools.setExpendHeight(
-                  // TODO: integrate this state into store
-                  storage.getItem("utools-config/plugin-height") || 550,
-                );
-                utools.removeSubInput();
+        if (action.type === "text") {
+          // TODO: Optional Quick ask
+          utools.setExpendHeight(0);
+          let result = "";
+          utools.setSubInput(({ text }) => {
+            result = text;
+          }, "请输入内容，按下回车提问");
 
-                if (result) {
-                  uToolsStore.update((state) => (state.subInputText = result));
-                }
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              // Revert the height
+              utools.setExpendHeight(
+                // TODO: integrate this state into store
+                storage.getItem("utools-config/plugin-height") || 550,
+              );
+              utools.removeSubInput();
+
+              if (result) {
+                uToolsStore.update((state) => (state.subInputText = result));
               }
-            });
-          }
+            }
+          });
+        }
+      }
+
+      if (action && action.code === "Launch ChatGPT Next Aside") {
+        if (window.__UTOOLS_ASIDE__ && !window.__UTOOLS_ASIDE__.isDestroyed()) {
+          window.__UTOOLS_ASIDE__.show();
+          return;
+        }
+
+        utools.outPlugin();
+        utools.hideMainWindow();
+
+        const isMacOS = utools.isMacOS();
+
+        // Nearest Screen to the cursor
+        const display = window.utools.getDisplayNearestPoint(
+          window.utools.getCursorScreenPoint(),
+        );
+
+        // Bottom right corner
+        const windowHeight = Math.round(0.7 * display.workArea.height);
+
+        // Right side of the screen
+        const windowX = Math.round(
+          display.workArea.x + display.workArea.width - 420 - 20,
+        );
+
+        // Bottom of the screen
+        const windowY = Math.round(
+          display.workArea.y + display.workArea.height - windowHeight,
+        );
+
+        window.__UTOOLS_ASIDE__ = utools.createBrowserWindow(
+          "index.html",
+          {
+            // @ts-expect-error - uTools TS typo
+            show: false,
+            title: "ChatGPT Next Aside",
+            focusable: true, // for keyboard input
+            fullscreenable: false,
+            minimizable: false,
+            maximizable: false,
+            alwaysOnTop: true,
+            x: windowX,
+            y: windowY,
+            width: 420,
+            height: windowHeight,
+            type: isMacOS ? "panel" : "toolbar",
+            titleBarStyle: "hidden",
+            webPreferences: {
+              preload: "preload.js",
+            },
+          },
+          () => {
+            window.__UTOOLS_ASIDE__.showInactive();
+          },
+        );
+
+        window.__UTOOLS_ASIDE__.setAlwaysOnTop(
+          true,
+          isMacOS ? "modal-panel" : "pop-up-menu",
+        );
+
+        if (isMacOS) {
+          window.__UTOOLS_ASIDE__.setVisibleOnAllWorkspaces(true, {
+            visibleOnFullScreen: true,
+          });
         }
       }
     }
