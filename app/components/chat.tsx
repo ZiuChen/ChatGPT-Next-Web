@@ -1407,7 +1407,7 @@ function _Chat() {
           </div>
         </div>
         <div className="window-actions">
-          {isUTools && (
+          {!isMobileScreen && isUTools && (
             <div className="window-action-button">
               <IconButton
                 icon={session.globalAsk ? <Flash /> : <FlashOff />}
