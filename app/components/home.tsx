@@ -217,20 +217,23 @@ export function Home() {
     useAccessStore.getState().fetch();
   }, []);
 
-  const handler = useCallback((_: any, action: any) => {
-    const id = action.code.split("/")[1];
-    const sessions = chatStore.sessions;
-    const idx = sessions.findIndex((s) => s.id === id);
-    if (idx === -1) {
-      return;
-    }
+  const handler = useCallback(
+    (_: any, action: any) => {
+      const id = action.code.split("/")[1];
+      const sessions = chatStore.sessions;
+      const idx = sessions.findIndex((s) => s.id === id);
+      if (idx === -1) {
+        return;
+      }
 
-    // Update the action
-    uToolsStore.updateAction(action);
+      // Update the action
+      uToolsStore.updateAction(action);
 
-    // select the session
-    chatStore.selectSession(idx);
-  }, []);
+      // select the session
+      chatStore.selectSession(idx);
+    },
+    [chatStore, uToolsStore],
+  );
 
   useEffect(() => {
     if (isBrowserWindow) {
@@ -240,7 +243,7 @@ export function Home() {
         window.preload.ipcRenderer.off("globalAsk", handler);
       };
     }
-  }, []);
+  }, [handler]);
 
   useUToolsMessage((type, payload) => {
     const height = storage.getItem("utools-config/plugin-height");
