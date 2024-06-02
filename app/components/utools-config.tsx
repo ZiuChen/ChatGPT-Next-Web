@@ -11,8 +11,11 @@ export function UToolsConfigList() {
   );
 
   const updatePluginHeight = useThrottledCallback((height: number) => {
-    utools.setExpendHeight(height);
-    storage.setItem("utools-config/plugin-height", height);
+    if (utools.getWindowType() === "main") {
+      // Keep detach window size
+      utools.setExpendHeight(height);
+      storage.setItem("utools-config/plugin-height", height);
+    }
   }, 250);
 
   useEffect(() => {
