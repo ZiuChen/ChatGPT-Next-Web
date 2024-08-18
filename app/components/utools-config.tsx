@@ -27,6 +27,7 @@ export function UToolsConfigList() {
       <ListItem title={Locale.Settings.UTools.PluginHeight.Title}>
         <InputRange
           value={height}
+          aria="plugin-height"
           min="100"
           max="1000"
           step="1"
