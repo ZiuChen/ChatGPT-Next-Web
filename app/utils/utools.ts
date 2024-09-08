@@ -42,7 +42,17 @@ export function clearGlobalAsk(session: ChatSession) {
   return session;
 }
 
-export const storage = isUTools ? utools.dbStorage : globalThis?.localStorage;
+export const storage = isUTools
+  ? {
+      ...utools.dbStorage,
+      clear: () =>
+        utools.db.promises
+          .allDocs()
+          .then((docs) =>
+            Promise.all(docs.map((doc) => utools.db.remove(doc.id))),
+          ),
+    }
+  : globalThis?.localStorage;
 
 export interface UToolsEventMap {
   onPluginEnter: { code: string; type: string; payload: any; option: any };
