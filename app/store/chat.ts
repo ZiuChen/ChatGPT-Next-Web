@@ -763,28 +763,8 @@ export const useChatStore = createPersistStore(
       },
 
       async clearAllData() {
-        await Promise.all([
-          indexedDBStorage.clear(),
-          new Promise((resolve, reject) => {
-            if (isUTools) {
-              resolve(
-                utools.db.promises
-                  .allDocs()
-                  .then((docs) => {
-                    docs.forEach((doc) => {
-                      utools.db.promises.remove(doc._id);
-                    });
-                    return true;
-                  })
-                  .catch(reject),
-              );
-            } else {
-              // @ts-expect-error - Browser Environment
-              storage.clear();
-              resolve(true);
-            }
-          }),
-        ]);
+        await indexedDBStorage.clear();
+        storage.clear();
         location.reload();
       },
       setLastInput(lastInput: string) {
