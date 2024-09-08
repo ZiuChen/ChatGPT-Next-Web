@@ -14,6 +14,7 @@ export function UToolsConfigList() {
     if (utools.getWindowType() === "main") {
       // Keep detach window size
       utools.setExpendHeight(height);
+      // @ts-expect-error - Only available in uTools environment
       storage.setItem("utools-config/plugin-height", height);
     }
   }, 250);
