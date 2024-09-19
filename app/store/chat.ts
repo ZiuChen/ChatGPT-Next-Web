@@ -29,12 +29,7 @@ import { ModelConfig, ModelType, useAppConfig } from "./config";
 import { useAccessStore } from "./access";
 import { collectModelsWithDefaultModel } from "../utils/model";
 import { createEmptyMask, Mask } from "./mask";
-import {
-  clearGlobalAsk,
-  isUTools,
-  setupGlobalAsk,
-  storage,
-} from "../utils/utools";
+import { clearGlobalAsk, setupGlobalAsk, storage } from "../utils/utools";
 
 export type ChatMessageTool = {
   id: string;

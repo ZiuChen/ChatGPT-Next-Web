@@ -73,7 +73,6 @@ import {
   isVisionModel,
   isDalle3,
   showPlugins,
-  safeLocalStorage,
 } from "../utils";
 
 import { uploadImage as uploadImageRemote } from "@/app/utils/chat";
@@ -124,7 +123,6 @@ import {
 } from "../utils/utools";
 import { useUToolsStore } from "../store/utools";
 
-const localStorage = safeLocalStorage();
 import { ClientApi } from "../client/api";
 import { createTTSPlayer } from "../utils/audio";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "../utils/ms_edge_tts";
