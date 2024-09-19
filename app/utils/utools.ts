@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { ChatSession } from "../store";
 
-export const isUTools = typeof window !== "undefined" && !!window.utools;
+export const isUTools = typeof window !== "undefined" && !!window?.utools;
 
 export const isBrowserWindow = isUTools
   ? utools.getWindowType() === "browser"

@@ -24,12 +24,7 @@ import { createPersistStore } from "../utils/store";
 import { estimateTokenLength } from "../utils/token";
 import { ModelConfig, ModelType, useAppConfig } from "./config";
 import { createEmptyMask, Mask } from "./mask";
-import {
-  clearGlobalAsk,
-  isUTools,
-  setupGlobalAsk,
-  storage,
-} from "../utils/utools";
+import { clearGlobalAsk, setupGlobalAsk, storage } from "../utils/utools";
 
 export type ChatMessageTool = {
   id: string;

@@ -18,13 +18,9 @@ import ar from "./ar";
 import bn from "./bn";
 import sk from "./sk";
 import { merge } from "../utils/merge";
-import { safeLocalStorage } from "@/app/utils";
-
 import type { LocaleType } from "./cn";
-import { storage } from "../utils/utools";
+import { isUTools } from "../utils/utools";
 export type { LocaleType, PartialLocaleType } from "./cn";
-
-const localStorage = safeLocalStorage();
 
 const ALL_LANGS = {
   cn,
@@ -86,11 +82,11 @@ merge(fallbackLang, targetLang);
 export default fallbackLang as LocaleType;
 
 function getItem(key: string) {
-  return utools.dbStorage.getItem(key) ?? null;
+  return isUTools ? utools.dbStorage.getItem(key) ?? null : null;
 }
 
 function setItem(key: string, value: string) {
-  return utools.dbStorage.setItem(key, value);
+  return isUTools ? utools.dbStorage.setItem(key, value) : false;
 }
 
 function getLanguage() {
