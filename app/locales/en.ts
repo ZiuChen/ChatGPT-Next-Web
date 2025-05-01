@@ -107,6 +107,7 @@ const en: LocaleType = {
       copyLastMessage: "Copy Last Reply",
       copyLastCode: "Copy Last Code Block",
       showShortcutKey: "Show Shortcuts",
+      clearContext: "Clear Context",
     },
   },
   Export: {
@@ -213,6 +214,8 @@ const en: LocaleType = {
       IsChecking: "Checking update...",
       FoundUpdate: (x: string) => `Found new version: ${x}`,
       GoToUpdate: "Update",
+      Success: "Update Successful.",
+      Failed: "Update Failed.",
     },
     SendKey: "Send Key",
     Theme: "Theme",
@@ -450,6 +453,50 @@ const en: LocaleType = {
           SubTitle: "Example: ",
         },
       },
+      DeepSeek: {
+        ApiKey: {
+          Title: "DeepSeek API Key",
+          SubTitle: "Use a custom DeepSeek API Key",
+          Placeholder: "DeepSeek API Key",
+        },
+        Endpoint: {
+          Title: "Endpoint Address",
+          SubTitle: "Example: ",
+        },
+      },
+      XAI: {
+        ApiKey: {
+          Title: "XAI API Key",
+          SubTitle: "Use a custom XAI API Key",
+          Placeholder: "XAI API Key",
+        },
+        Endpoint: {
+          Title: "Endpoint Address",
+          SubTitle: "Example: ",
+        },
+      },
+      ChatGLM: {
+        ApiKey: {
+          Title: "ChatGLM API Key",
+          SubTitle: "Use a custom ChatGLM API Key",
+          Placeholder: "ChatGLM API Key",
+        },
+        Endpoint: {
+          Title: "Endpoint Address",
+          SubTitle: "Example: ",
+        },
+      },
+      SiliconFlow: {
+        ApiKey: {
+          Title: "SiliconFlow API Key",
+          SubTitle: "Use a custom SiliconFlow API Key",
+          Placeholder: "SiliconFlow API Key",
+        },
+        Endpoint: {
+          Title: "Endpoint Address",
+          SubTitle: "Example: ",
+        },
+      },
       Stability: {
         ApiKey: {
           Title: "Stability API Key",
@@ -506,8 +553,8 @@ const en: LocaleType = {
 
     Model: "Model",
     CompressModel: {
-      Title: "Compression Model",
-      SubTitle: "Model used to compress history",
+      Title: "Summary Model",
+      SubTitle: "Model used to compress history and generate title",
     },
     Temperature: {
       Title: "Temperature",
@@ -552,6 +599,39 @@ const en: LocaleType = {
       },
       Engine: "TTS Engine",
     },
+    Realtime: {
+      Enable: {
+        Title: "Realtime Chat",
+        SubTitle: "Enable realtime chat feature",
+      },
+      Provider: {
+        Title: "Model Provider",
+        SubTitle: "Switch between different providers",
+      },
+      Model: {
+        Title: "Model",
+        SubTitle: "Select a model",
+      },
+      ApiKey: {
+        Title: "API Key",
+        SubTitle: "API Key",
+        Placeholder: "API Key",
+      },
+      Azure: {
+        Endpoint: {
+          Title: "Endpoint",
+          SubTitle: "Endpoint",
+        },
+        Deployment: {
+          Title: "Deployment Name",
+          SubTitle: "Deployment Name",
+        },
+      },
+      Temperature: {
+        Title: "Randomness (temperature)",
+        SubTitle: "Higher values result in more random responses",
+      },
+    },
   },
   Store: {
     DefaultTopic: "New Conversation",
@@ -583,6 +663,9 @@ const en: LocaleType = {
   },
   Discovery: {
     Name: "Discovery",
+  },
+  Mcp: {
+    Name: "MCP",
   },
   FineTuned: {
     Sysmessage: "You are an assistant that",
@@ -680,6 +763,11 @@ const en: LocaleType = {
       Artifacts: {
         Title: "Enable Artifacts",
         SubTitle: "Can render HTML page when enable artifacts.",
+      },
+      CodeFold: {
+        Title: "Enable CodeFold",
+        SubTitle:
+          "Automatically collapse/expand overly long code blocks when CodeFold is enabled",
       },
       Share: {
         Title: "Share This Mask",
