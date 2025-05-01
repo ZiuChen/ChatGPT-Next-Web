@@ -898,7 +898,7 @@ export function EditMessageModal(props: { onClose: () => void }) {
               type="text"
               value={session.topic}
               onInput={(e) =>
-                chatStore.updateCurrentSession((session) => {
+                chatStore.updateTargetSession(session, (session) => {
                   session.topic = e.currentTarget.value;
 
                   if (session.globalAsk) {
@@ -1737,13 +1737,13 @@ function _Chat() {
 
   function toggleGlobalAsk() {
     if (!session.globalAsk) {
-      chatStore.updateCurrentSession((session) => {
+      chatStore.updateTargetSession(session, (session) => {
         session.globalAsk = true;
       });
       setupGlobalAsk(session);
       showToast(Locale.UToolsFeature.GlobalAsk.Tips.Success(session.topic));
     } else {
-      chatStore.updateCurrentSession((session) => {
+      chatStore.updateTargetSession(session, (session) => {
         session.globalAsk = false;
       });
       clearGlobalAsk(session);

@@ -29,7 +29,6 @@ import {
   SUMMARIZE_MODEL,
 } from "../constant";
 import Locale, { getLang } from "../locales";
-import { isDalle3 } from "../utils";
 import { prettyObject } from "../utils/format";
 import { createPersistStore } from "../utils/store";
 import { estimateTokenLength } from "../utils/token";
